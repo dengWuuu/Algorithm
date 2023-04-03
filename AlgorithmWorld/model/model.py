@@ -1,12 +1,14 @@
 import datetime
 import uuid
 
+import sqlalchemy
 from sqlalchemy import (
     create_engine,
     Integer,
     BigInteger,
     String,
-    DateTime
+    DateTime,
+    FetchedValue
 )
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session
@@ -15,11 +17,11 @@ from sqlalchemy.orm import sessionmaker
 from AlgorithmWorld.extensions import db
 
 # 基础类
-Base = declarative_base()
+Base = sqlalchemy.orm.declarative_base()
 
 # 创建引擎
 engine = create_engine(
-    "mysql+pymysql://tom:123@192.168.0.120:3306/db1?charset=utf8mb4",
+    "mysql+pymysql://root:Aa1076766987@127.0.0.1:3306/AlgorithmWorld?charset=utf8mb4",
     # 超过链接池大小外最多创建的链接
     max_overflow=0,
     # 链接池大小
@@ -50,10 +52,11 @@ class User(Base):
     isRoot = db.Column(Integer, default=0)
     updateTime = db.Column(DateTime, default=datetime.datetime.now())
     createTime = db.Column(DateTime, default=datetime.datetime.now())
-    version = db.Column(BigInteger)
+    version = db.Column(BigInteger, nullable=False, system=True, server_default=FetchedValue())
     deleted = db.Column(Integer, default=0)
     __mapper_args__ = {
-        'version_id_col': version,
+        "version_id_col": version,
+        "version_id_generator": False
     }
 
 
@@ -66,10 +69,11 @@ class User_Record(Base):
     AlgorithmPkgId = db.Column(BigInteger)
     updateTime = db.Column(DateTime, default=datetime.datetime.now())
     createTime = db.Column(DateTime, default=datetime.datetime.now())
-    version = db.Column(BigInteger)
+    version = db.Column(BigInteger, nullable=False, system=True, server_default=FetchedValue())
     deleted = db.Column(Integer, default=0)
     __mapper_args__ = {
-        'version_id_col': version,
+        "version_id_col": version,
+        "version_id_generator": False
     }
 
 
@@ -77,17 +81,18 @@ class AlgorithmPkg(Base):
     """ 必须继承Base """
     # 数据库中存储的表名
     __tablename__ = "algorithm_pkg_id"
+    algorithmPkgId = db.Column(BigInteger, primary_key=True, autoincrement=True)
     name = db.Column(String(150))
     userId = db.Column(BigInteger)
-    algorithmPkgId = db.Column(BigInteger)
     tag = db.Column(String(30))
     location = db.Column(String(150))
     updateTime = db.Column(DateTime, default=datetime.datetime.now())
     createTime = db.Column(DateTime, default=datetime.datetime.now())
-    version = db.Column(BigInteger)
+    version = db.Column(BigInteger, nullable=False, system=True, server_default=FetchedValue())
     deleted = db.Column(Integer, default=0)
     __mapper_args__ = {
-        'version_id_col': version,
+        "version_id_col": version,
+        "version_id_generator": False
     }
 
 
