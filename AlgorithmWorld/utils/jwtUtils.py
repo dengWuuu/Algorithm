@@ -5,20 +5,6 @@ import jwt
 from flask import g, request, Flask, current_app
 from jwt import exceptions
 
-app = Flask(__name__)
-
-# 处理中文编码
-app.config['JSON_AS_ASCII'] = False
-
-
-# 跨域支持
-def after_request(resp):
-    resp.headers['Access-Control-Allow-Origin'] = '*'
-    return resp
-
-
-app.after_request(after_request)
-
 # 构造header
 headers = {
     'typ': 'jwt',
@@ -107,36 +93,6 @@ def jwt_authentication():
             g.userId = -2
         except jwt.InvalidTokenError:  # '非法的token'
             g.userId = -3
-
-
-@app.route('/')
-def hello_world():
-    return "ok"
-
-
-# 登录
-@app.route('/api/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        data = request.form
-        username = data.get("username")
-        password = data.get("password")
-        # 验证账号密码，正确则返回token，用于后续接口权限验证
-        if username == "root" and password == "123456":
-            token = create_token(username, password)
-            return {"code": 200, "message": "success", "data": {"token": token}}
-        elif username == 'test' and password == "123456":
-            token = create_token(username, password)
-            return {"code": 200, "message": "success", "data": {"token": token}}
-        else:
-            return {"code": 501, "message": "登陆失败"}
-
-    elif request.method == 'GET':
-        return {"code": 202, "message": "get is nothing"}
-    else:
-        return {"code": 203, "message": "'not support other method'"}
-
-
 # 测试接口
 @app.route('/api/test', methods=['GET', 'POST'])
 @login_required
@@ -145,5 +101,4 @@ def submit_test_info_():
     return userId
 
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8090, debug=True)
+
