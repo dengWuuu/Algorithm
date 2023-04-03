@@ -1,5 +1,4 @@
 import datetime
-import uuid
 
 import sqlalchemy
 from sqlalchemy import (
@@ -10,7 +9,6 @@ from sqlalchemy import (
     DateTime,
     FetchedValue
 )
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
 
