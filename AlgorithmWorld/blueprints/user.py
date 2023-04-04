@@ -7,6 +7,9 @@ user_bp = Blueprint('user', __name__)
 @user_bp.route('/login', methods=['POST'])
 def login():
     data = request.form
+    username = data.get("username")
+    password = data.get("password")
+
     return {"code": 200, "data": data}
 
 
