@@ -29,11 +29,10 @@ class User(Base):
     isRoot = db.Column(Integer, default=0)
     updateTime = db.Column(DateTime, default=datetime.datetime.now())
     createTime = db.Column(DateTime, default=datetime.datetime.now())
-    version = db.Column(BigInteger, nullable=False, system=True, server_default=FetchedValue())
+    version = db.Column(BigInteger, nullable=False)
     deleted = db.Column(Integer, default=0)
     __mapper_args__ = {
         "version_id_col": version,
-        "version_id_generator": False
     }
 
     # extra function to help judge user is administrator
@@ -48,11 +47,10 @@ class User_Record(Base):
     AlgorithmPkgId = db.Column(BigInteger)
     updateTime = db.Column(DateTime, default=datetime.datetime.now())
     createTime = db.Column(DateTime, default=datetime.datetime.now())
-    version = db.Column(BigInteger, nullable=False, system=True, server_default=FetchedValue())
+    version = db.Column(BigInteger, nullable=False)
     deleted = db.Column(Integer, default=0)
     __mapper_args__ = {
         "version_id_col": version,
-        "version_id_generator": False
     }
 
 
@@ -67,11 +65,10 @@ class AlgorithmPkg(Base):
     location = db.Column(String(150))
     updateTime = db.Column(DateTime, default=datetime.datetime.now())
     createTime = db.Column(DateTime, default=datetime.datetime.now())
-    version = db.Column(BigInteger, nullable=False, system=True, server_default=FetchedValue())
+    version = db.Column(BigInteger, nullable=False)
     deleted = db.Column(Integer, default=0)
     __mapper_args__ = {
         "version_id_col": version,
-        "version_id_generator": False
     }
 
 
