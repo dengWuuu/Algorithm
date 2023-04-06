@@ -1,6 +1,7 @@
 from flask import Flask
 
-from AlgorithmWorld.blueprints import register_blueprints
+from AlgorithmWorld.blueprints.file import file_bp
+from AlgorithmWorld.blueprints.user import user_bp
 from AlgorithmWorld.config.config import config
 from AlgorithmWorld.extensions import db
 from AlgorithmWorld.utils.jwtUtils import jwt_authentication
@@ -22,6 +23,11 @@ def create_app(config_name=None):
 
     jwt_init(app)
     return app
+
+
+def register_blueprints(app):
+    app.register_blueprint(user_bp, url_prefix='/user')
+    app.register_blueprint(file_bp, url_prefix='/file')
 
 
 def register_extensions(app):

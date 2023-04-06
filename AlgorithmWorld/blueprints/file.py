@@ -1,18 +1,14 @@
-import os
+from flask import Blueprint
+from AlgorithmWorld.utils.upload import upload_files
+from AlgorithmWorld.config.config import DevelopmentConfig
 
-from flask import Blueprint, request
-
-base_path = os.path.abspath(os.path.dirname(__name__))
-base_path = base_path.replace('/blueprints', '/static')
 file_bp = Blueprint('file', __name__)
 
 
-@file_bp.route('/upload/', methods=['GET', 'POST'])
+@file_bp.route('/upload', methods=['GET', 'POST'])
 def upload():
-    image = request.files['image']
-    # file path
-    path = base_path
+    file_path = upload_files(base_path=DevelopmentConfig.UPLOAD_FOLDER)
+    if file_path is None:
+        return {"code": 200, "message": "上传失败"}
 
-    file_path = path + image.filename
-    image.save(file_path)
-    return {"code": 200, "message": "储存文件成功"}
+    return {"code": 200, "message": "上传成功", "file_path": file_path}
