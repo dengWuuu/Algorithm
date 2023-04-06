@@ -83,6 +83,8 @@ def root_required(f):
             return {'code': 4001, 'message': '权限认证失败-'}, 401
 
     return wrapper
+
+
 def jwt_authentication():
     """
     1.获取请求头Authorization中的token
