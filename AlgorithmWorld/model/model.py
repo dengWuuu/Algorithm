@@ -26,6 +26,7 @@ class User(Base):
     userId = db.Column(BigInteger, primary_key=True, autoincrement=True)
     username = db.Column(String(20))
     password = db.Column(String(128))
+    imageUrl = db.Column(String(250))
     isRoot = db.Column(Integer, default=0)
     updateTime = db.Column(DateTime, default=datetime.datetime.now())
     createTime = db.Column(DateTime, default=datetime.datetime.now())
@@ -60,6 +61,7 @@ class AlgorithmPkg(Base):
     __tablename__ = "algorithm_pkg_id"
     algorithmPkgId = db.Column(BigInteger, primary_key=True, autoincrement=True)
     name = db.Column(String(150))
+    imageUrl = db.Column(String(250))
     userId = db.Column(BigInteger)
     tag = db.Column(String(30))
     location = db.Column(String(150))
