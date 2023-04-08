@@ -4,6 +4,7 @@ from AlgorithmWorld.extensions import db
 from AlgorithmWorld.model.model import User
 from AlgorithmWorld.utils.jwtUtils import login_required, create_token, root_required
 from AlgorithmWorld.utils.md5 import password_md5
+from AlgorithmWorld.dao import userDao
 
 user_bp = Blueprint('user', __name__)
 
@@ -69,6 +70,26 @@ def addUser():
 
     del data['password']
     return {"code": 200, "data": data}
+
+
+@user_bp.route('/delete', methods=['POST'])
+@login_required
+@root_required
+def deleteUser():
+    # 权限验证
+    data = request.json
+    user = packUser(data)
+
+    # 判断是否存在此用户
+    result = db.session.query(User).filter(User.userId == user.userId).first()
+    if result is None:
+        return {"code": 200, "message": "不存在此用户"}
+
+    # 存在则删除用户
+    success = userDao.delete1User(user)
+    if not success:
+        return {"code": 200, "message": "删除用户失败"}
+    return {"code": 200, "message": "删除用户成功"}
 
 
 def packUser(data):
