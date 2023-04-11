@@ -1,10 +1,10 @@
 from flask import Blueprint, request
 
+from AlgorithmWorld.dao import userDao
 from AlgorithmWorld.extensions import db
 from AlgorithmWorld.model.model import User
-from AlgorithmWorld.utils.jwtUtils import login_required, create_token, root_required
+from AlgorithmWorld.utils.jwtUtils import create_token
 from AlgorithmWorld.utils.md5 import password_md5
-from AlgorithmWorld.dao import userDao
 
 user_bp = Blueprint('user', __name__)
 
@@ -52,8 +52,8 @@ def register():
 
 
 @user_bp.route('/add', methods=['POST'])
-@login_required
-@root_required
+# @login_required
+# @root_required
 def addUser():
     # 权限验证
     data = request.json
@@ -73,8 +73,8 @@ def addUser():
 
 
 @user_bp.route('/delete', methods=['POST'])
-@login_required
-@root_required
+# @login_required
+# @root_required
 def deleteUser():
     # 权限验证
     data = request.json
@@ -91,6 +91,22 @@ def deleteUser():
         return {"code": 200, "message": "删除用户失败"}
     return {"code": 200, "message": "删除用户成功"}
 
+@user_bp.route('/update', methods=['POST'])
+# @login_required
+# @root_required
+def updateUser():
+    return None
+
+@user_bp.route('/', methods=['GET'])
+# @login_required
+def getUser():
+    userId = request.values.get("userId")
+    # 判断是否存在此用户
+    result:User = db.session.query(User).filter(User.userId == userId).first()
+    if result is None:
+        return {"code": 200, "message": "不存在此用户"}
+
+    return {"code": 200, "data": result.as_dict()}
 
 def packUser(data):
     user = User()

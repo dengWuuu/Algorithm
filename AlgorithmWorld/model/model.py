@@ -35,7 +35,8 @@ class User(Base):
     __mapper_args__ = {
         "version_id_col": version,
     }
-
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
     # extra function to help judge user is administrator
 
 
