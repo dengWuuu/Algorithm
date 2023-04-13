@@ -3,7 +3,7 @@ from flask import Blueprint, request
 from AlgorithmWorld.dao import userDao
 from AlgorithmWorld.extensions import db
 from AlgorithmWorld.model.model import User
-from AlgorithmWorld.utils.jwtUtils import create_token
+from AlgorithmWorld.utils.jwtUtils import create_token, login_required, root_required
 from AlgorithmWorld.utils.md5 import password_md5
 
 user_bp = Blueprint('user', __name__)
@@ -11,7 +11,7 @@ user_bp = Blueprint('user', __name__)
 
 @user_bp.route('/login', methods=['POST'])
 def login():
-    data = request.form
+    data = request.json
     username = data.get("username")
     password = data.get("password")
     password = password_md5(password)
@@ -52,8 +52,8 @@ def register():
 
 
 @user_bp.route('/add', methods=['POST'])
-# @login_required
-# @root_required
+@login_required
+@root_required
 def addUser():
     # 权限验证
     data = request.json
@@ -92,13 +92,13 @@ def deleteUser():
     return {"code": 200, "message": "删除用户成功"}
 
 @user_bp.route('/update', methods=['POST'])
-# @login_required
+@login_required
 # @root_required
 def updateUser():
     return None
 
 @user_bp.route('/', methods=['GET'])
-# @login_required
+@login_required
 def getUser():
     userId = request.values.get("userId")
     # 判断是否存在此用户
@@ -108,6 +108,10 @@ def getUser():
 
     return {"code": 200, "data": result.as_dict()}
 
+@user_bp.route('/test', methods=['GET'])
+@login_required
+def test():
+    return  {"code": 200, "message": "权限正确"}
 def packUser(data):
     user = User()
     user.username = data['username']
