@@ -86,10 +86,9 @@ def deleteUser():
         return {"code": 200, "message": "不存在此用户"}
 
     # 存在则删除用户
-    success = userDao.delete1User(user)
-    if not success:
-        return {"code": 200, "message": "删除用户失败"}
+    userDao.delete1User(user)
     return {"code": 200, "message": "删除用户成功"}
+
 
 @user_bp.route('/update', methods=['POST'])
 @login_required
@@ -97,21 +96,25 @@ def deleteUser():
 def updateUser():
     return None
 
+
 @user_bp.route('/', methods=['GET'])
 @login_required
 def getUser():
     userId = request.values.get("userId")
     # 判断是否存在此用户
-    result:User = db.session.query(User).filter(User.userId == userId).first()
+    result: User = db.session.query(User).filter(User.userId == userId).first()
     if result is None:
         return {"code": 200, "message": "不存在此用户"}
 
     return {"code": 200, "data": result.as_dict()}
 
+
 @user_bp.route('/test', methods=['GET'])
 @login_required
 def test():
-    return  {"code": 200, "message": "权限正确"}
+    return {"code": 200, "message": "权限正确"}
+
+
 def packUser(data):
     user = User()
     user.username = data['username']
