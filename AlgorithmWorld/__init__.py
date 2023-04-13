@@ -1,5 +1,6 @@
 from flask import Flask
 
+from AlgorithmWorld.blueprints.admin import admin_bp
 from AlgorithmWorld.blueprints.file import file_bp
 from AlgorithmWorld.blueprints.user import user_bp
 from AlgorithmWorld.config.config import config
@@ -28,6 +29,7 @@ def create_app(config_name=None):
 def register_blueprints(app):
     app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(file_bp, url_prefix='/file')
+    app.register_blueprint(admin_bp, url_prefix='/admin')
 
 
 def register_extensions(app):
