@@ -27,6 +27,8 @@ class User(Base):
     username = db.Column(String(20))
     password = db.Column(String(128))
     imageUrl = db.Column(String(250))
+    email = db.Column(String(30))
+    tel = db.Column(String(200))
     isRoot = db.Column(Integer, default=0)
     updateTime = db.Column(DateTime, default=datetime.datetime.now())
     createTime = db.Column(DateTime, default=datetime.datetime.now())
@@ -35,6 +37,7 @@ class User(Base):
     __mapper_args__ = {
         "version_id_col": version,
     }
+
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
     # extra function to help judge user is administrator

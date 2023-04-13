@@ -73,8 +73,8 @@ def addUser():
 
 
 @user_bp.route('/delete', methods=['POST'])
-# @login_required
-# @root_required
+@login_required
+@root_required
 def deleteUser():
     # 权限验证
     data = request.json
@@ -90,11 +90,25 @@ def deleteUser():
     return {"code": 200, "message": "删除用户成功"}
 
 
-@user_bp.route('/update', methods=['POST'])
+@user_bp.route('/update', methods=['PUT'])
 @login_required
-# @root_required
 def updateUser():
-    return None
+    data = request.json
+    user: User = User()
+
+    user.email = data.get("email")
+    user.userId = data.get("userId")
+    user.tel = data.get("tel")
+    user.imageUrl = data.get("imageUrl")
+
+    db.session.query(User).filter(User.userId == user.userId).update({
+        User.email: user.email,
+        User.tel: user.tel,
+        User.imageUrl: user.imageUrl
+    })
+
+    db.session.commit()
+    return {"code": 200, "message": "更新用户成功"}
 
 
 @user_bp.route('/', methods=['GET'])
