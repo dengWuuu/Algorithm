@@ -3,7 +3,7 @@ from flask import Blueprint, request
 from AlgorithmWorld.dao import userDao
 from AlgorithmWorld.extensions import db
 from AlgorithmWorld.model.model import User
-from AlgorithmWorld.utils.jwtUtils import create_token, login_required, root_required
+from AlgorithmWorld.utils.jwtUtils import create_token, login_required, root_required, get_jwt_payload
 from AlgorithmWorld.utils.md5 import password_md5
 
 user_bp = Blueprint('user', __name__)
@@ -100,6 +100,11 @@ def updateUser():
     user.userId = data.get("userId")
     user.tel = data.get("tel")
     user.imageUrl = data.get("imageUrl")
+
+    payload = get_jwt_payload()
+    # 校验是否修改的自己的信息
+    if payload.get('userId') != user.userId:
+        return {"code": 200, "message": "你修改的不是自己的信息"}
 
     db.session.query(User).filter(User.userId == user.userId).update({
         User.email: user.email,

@@ -11,7 +11,7 @@ headers = {
     'alg': 'HS256'
 }
 
-# 密钥
+# 密钥加盐
 SALT = 'iv%i6xo7l8_t9bf_u!8#g#m*)*+ej@bek6)(@u3kh*42+unit='
 
 
@@ -111,3 +111,13 @@ def jwt_authentication():
             g.userId = -2
         except jwt.InvalidTokenError:  # '非法的token'
             g.userId = -3
+
+
+def get_jwt_payload():
+    auth = request.headers.get('Authorization')
+    if auth and auth.startswith('Bearer '):
+        "提取token 0-6 被Bearer和空格占用 取下标7以后的所有字符"
+        token = auth[7:]
+        payload = jwt.decode(token, SALT, algorithms=['HS256'])
+        return payload
+    return None
