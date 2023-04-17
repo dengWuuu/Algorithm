@@ -28,7 +28,11 @@ def login():
 
     # success
     token = create_token(user.userId, user.isRoot)
-    return {"code": 200, "data": {"token": token}}
+    return {"code": 200, "data": {
+        "token": token,
+        "isRoot": user.isRoot,
+        "userId": user.userId
+    }}
 
 
 @user_bp.route('/register', methods=['POST'])
@@ -50,6 +54,7 @@ def register():
     db.session.add(user)
     db.session.commit()
     return {"code": 200, "data": user.username}
+
 
 @user_bp.route('/delete', methods=['POST'])
 @login_required
