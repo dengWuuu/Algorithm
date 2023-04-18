@@ -112,6 +112,29 @@ def getUser():
     return {"code": 200, "data": result.as_dict()}
 
 
+@user_bp.route('/resetPassword', methods=['POST'])
+@login_required
+def resetPassword():
+    data = request.json
+    newPassword = data['newPassword']
+    oldPassword = data['oldPassword']
+
+    # 获取要重置密码的人的id
+    payload = get_jwt_payload()
+    userId = payload.get('userId')
+    user: User = db.session.query(User).filter(User.userId == userId).first()
+
+    if password_md5(oldPassword) != user.password:
+        return {"code": 200, "message": "旧密码错误"}
+
+    # 密码校验成功后 修改密码
+    db.session.query(User).filter(User.userId == user.userId).update({
+        User.password: password_md5(newPassword)
+    })
+    db.session.commit()
+    return {"code": 200, "message": "重置成功"}
+
+
 @user_bp.route('/test', methods=['GET'])
 @login_required
 def test():

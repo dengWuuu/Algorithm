@@ -58,3 +58,18 @@ def updateUser():
 
     db.session.commit()
     return {"code": 200, "message": "更新用户成功"}
+
+
+@admin_bp.route('/resetUserPassword', methods=['PUT'])
+@login_required
+@root_required
+def updateUser():
+    data = request.json
+    userId = data['userId']
+    password = data['password']
+
+    db.session.query(User).filter(User.userId == userId).update({
+        User.password: password_md5(password)
+    })
+    db.session.commit()
+    return {"code": 200, "message": "重置密码成功"}
