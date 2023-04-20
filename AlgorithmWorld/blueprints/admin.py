@@ -63,7 +63,7 @@ def updateUser():
 @admin_bp.route('/resetUserPassword', methods=['PUT'])
 @login_required
 @root_required
-def updateUser():
+def resetUserPassword():
     data = request.json
     userId = data['userId']
     password = data['password']

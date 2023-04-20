@@ -23,11 +23,10 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
-def upload_files(base_path):
+def upload_img(base_path):
     if not os.path.exists(base_path):
         os.makedirs(base_path)
 
-    image = None
     if platform.system() == 'Windows':
         image = request.files['image']
     else:
@@ -40,4 +39,21 @@ def upload_files(base_path):
     filename = create_uuid() + image.filename
     file_path = base_path + spacer + filename
     image.save(file_path)
+    return file_path
+
+
+def upload_zips(base_path):
+    if not os.path.exists(base_path):
+        os.makedirs(base_path)
+
+    if platform.system() == 'Windows':
+        toolZip = request.files['toolZip']
+    else:
+        toolZip = request.files.get('toolZip')
+
+    spacer = SPACER.get(platform.system())
+    # file path
+    filename = create_uuid() + toolZip.filename
+    file_path = base_path + spacer + filename
+    toolZip.save(file_path)
     return file_path
