@@ -7,7 +7,7 @@ from sqlalchemy import (
     BigInteger,
     String,
     DateTime,
-    FetchedValue
+    FetchedValue, Text
 )
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
@@ -49,7 +49,7 @@ class User_Record(Base):
     __tablename__ = "user_record"
     recordId = db.Column(BigInteger, primary_key=True, autoincrement=True)
     userId = db.Column(BigInteger)
-    AlgorithmPkgId = db.Column(BigInteger)
+    toolId = db.Column(BigInteger)
     updateTime = db.Column(DateTime, default=datetime.datetime.now())
     createTime = db.Column(DateTime, default=datetime.datetime.now())
     version = db.Column(BigInteger, nullable=False)
@@ -59,16 +59,22 @@ class User_Record(Base):
     }
 
 
-class AlgorithmPkg(Base):
+class Tool(Base):
     """ 必须继承Base """
     # 数据库中存储的表名
-    __tablename__ = "algorithm_pkg_id"
-    algorithmPkgId = db.Column(BigInteger, primary_key=True, autoincrement=True)
-    name = db.Column(String(150))
-    imageUrl = db.Column(String(250))
+    __tablename__ = "tool"
+    toolId = db.Column(BigInteger, primary_key=True, autoincrement=True)
+    toolName = db.Column(String(150))
+    toolImg = db.Column(String(250))
     userId = db.Column(BigInteger)
     tag = db.Column(String(30))
     location = db.Column(String(150))
+    explain = db.Column(String(1000))
+    example = db.Column(String(1000))
+    param = db.Column(String(10000))
+    canTry = db.Column(Integer, default=0)
+    canDownload = db.Column(Integer, default=0)
+    instruction = db.Column(Text)
     updateTime = db.Column(DateTime, default=datetime.datetime.now())
     createTime = db.Column(DateTime, default=datetime.datetime.now())
     version = db.Column(BigInteger, nullable=False)
